@@ -1,7 +1,7 @@
 import type { PriceTriggerMetaData } from "@/types/NodeandEdge"
 import { Handle, Position } from "@xyflow/react"
 
-const PriceTrigger = ({ data, isConnectable }: {
+const PriceTrigger = ({ data }: {
     data: {
         metaData: PriceTriggerMetaData
     },
