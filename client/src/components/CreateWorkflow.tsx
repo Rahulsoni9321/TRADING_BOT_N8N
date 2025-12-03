@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge, type EdgeChange, type Connection } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { type EdgeType, type NodeKind, type NodeMetaData, type NodeType } from '../types/NodeandEdge';
+import { nodeTypes, type EdgeType, type NodeKind, type NodeMetaData, type NodeType } from '../types/NodeandEdge';
 import TriggerSheet from './TriggerSheet';
 
 
@@ -23,6 +23,10 @@ export default function CreateWorkflow() {
         [],
     );
 
+    const onConnectEnd = useCallback((params: any, connectionInfo: any) => {
+        console.log("this is the connection info;.", connectionInfo.fromNode.type);
+    }, [])
+
     return (
         <div style={{ width: '100vw', height: '100vh' }}>
 
@@ -30,20 +34,21 @@ export default function CreateWorkflow() {
                 setNodes([...nodes, {
                     id: Math.random().toString(),
                     position: { x: 0, y: 0 },
+                    type: kind,
                     data: {
-                        type: 'trigger',
-                        kind,
-                        metaData,
-                        label : kind
+                        kind: "trigger",
+                        metaData
                     },
                 }])
             }}></TriggerSheet>}
             <ReactFlow
                 nodes={nodes}
                 edges={edges}
+                nodeTypes={nodeTypes}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onConnectEnd={onConnectEnd}
                 fitView
             />
         </div>

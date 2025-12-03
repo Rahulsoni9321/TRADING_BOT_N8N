@@ -1,4 +1,4 @@
-import type { NodeKind, NodeMetaData } from '@/types/NodeandEdge';
+import type { NodeKind, NodeMetaData, PriceTriggerMetaData, TimeTriggerMetaData, triggerType } from '@/types/NodeandEdge';
 import { Button } from "@/components/ui/button"
 import {
     Sheet,
@@ -8,42 +8,29 @@ import {
     SheetFooter,
     SheetHeader,
     SheetTitle,
-    SheetTrigger,
 } from "@/components/ui/sheet"
 import {
     Select,
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
 import { useState } from 'react';
+import { Input } from './ui/input';
+import { SUPPORTED_ASSET, SUPPORTED_TRIGGER } from '@/config';
 
-interface triggerType {
-    id: NodeKind,
-    title: string,
-    description: string
-}
 
-const SUPPORTED_TRIGGER: triggerType[] = [
-    {
-        id: "time-trigger",
-        title: "Timer",
-        description: "Run this trigger after every x seconds/minutes"
-    },
-    {
-        id: "price-trigger",
-        title: "Price Trigger",
-        description: "Runs when price goes above or below a certain number for an asset."
-    },
-]
+
+
 
 const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeMetaData) => void }) => {
 
     const [selectedTrigger, setSelectedTrigger] = useState(SUPPORTED_TRIGGER[0].id);
-    const [metaData, setMetaData] = useState({})
+    const [metaData, setMetaData] = useState<PriceTriggerMetaData | TimeTriggerMetaData>({
+        time : 3600
+    })
 
     return (
         <Sheet defaultOpen={true}>
@@ -54,7 +41,7 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                         Select the type of trigger that you want.
                     </SheetDescription>
                 </SheetHeader>
-                <Select onValueChange={(value: NodeKind) => {
+                <Select value={selectedTrigger} onValueChange={(value: NodeKind) => {
                     setSelectedTrigger(value)
                 }}>
                     <SelectTrigger className="w-full p-4">
@@ -73,6 +60,36 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                         </SelectGroup>
                     </SelectContent>
                 </Select>
+
+                {
+                    selectedTrigger === "price-trigger" && <> <Select onValueChange={(value: NodeKind) => {
+                        setMetaData({
+                            ...metaData,
+                            asset: value
+                        })
+                    }}>
+                        <SelectTrigger className="w-full p-4">
+                            <SelectValue placeholder="Select an asset" />
+                        </SelectTrigger>
+                        <SelectContent >
+                            <SelectGroup>
+                                {
+                                    SUPPORTED_ASSET.map((value) => {
+                                        return <>
+                                            {/* <SelectLabel>{title}</SelectLabel> */}
+                                            <SelectItem value={value}>{value}</SelectItem>
+                                        </>
+                                    })
+                                }
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                        <Input placeholder='trigger price' onChange={(e) => setMetaData({ ...metaData, price: Number(e.target.value) })}></Input>
+                    </>
+                }
+                {
+                    selectedTrigger === "time-trigger" && <Input className='rounded-md shadow border' placeholder='enter time interval ( in seconds )' onChange={e => setMetaData((metaData: NodeMetaData) => ({ ...metaData, timeInterval: Number(e.target.value) }))}></Input>
+                }
                 <SheetFooter>
                     <Button onClick={() => onSelect(selectedTrigger, metaData)} type="submit">Create Trigger</Button>
                     <SheetClose asChild>
