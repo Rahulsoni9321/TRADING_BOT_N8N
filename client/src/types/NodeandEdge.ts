@@ -1,4 +1,7 @@
 import type { SUPPORTED_ASSET } from "@/config";
+import BackPack from "@/nodes/action/Backpack";
+import HyperLiquid from "@/nodes/action/HyperLiquid";
+import Lighter from "@/nodes/action/Lighter";
 import PriceTrigger from "@/nodes/trigger/PriceTrigger";
 import TimeTrigger from "@/nodes/trigger/TimeTrigger";
 
@@ -27,7 +30,10 @@ export interface PriceTriggerMetaData {
 
 export const nodeTypes = {
     'price-trigger': PriceTrigger,
-    'time-trigger': TimeTrigger
+    'time-trigger': TimeTrigger,
+    'backpack': BackPack,
+    'hyperliquid': HyperLiquid,
+    'lighter': Lighter
 }
 
 export interface TimeTriggerMetaData {
@@ -35,9 +41,9 @@ export interface TimeTriggerMetaData {
 }
 
 export interface TradingMetaData {
-   type  : "LONG" | "SHORT",
-   qty : number,
-   symbol : string
+    type: "LONG" | "SHORT",
+    qty: number,
+    symbol: string
 }
 
 
@@ -48,4 +54,4 @@ export interface triggerType {
 }
 
 
-export type NodeMetaData = any;
+export type NodeMetaData = TradingMetaData | PriceTriggerMetaData | TimeTriggerMetaData ;

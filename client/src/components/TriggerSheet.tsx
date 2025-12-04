@@ -34,7 +34,7 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
 
     return (
         <Sheet defaultOpen={true}>
-            <SheetContent className='p-4'>
+            <SheetContent className='p-6 glass'>
                 <SheetHeader>
                     <SheetTitle>Trigger</SheetTitle>
                     <SheetDescription>
@@ -44,7 +44,7 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                 <Select value={selectedTrigger} onValueChange={(value: NodeKind) => {
                     setSelectedTrigger(value)
                 }}>
-                    <SelectTrigger className="w-full p-4">
+                    <SelectTrigger className="w-full p-4 rounded-md shadow-sm">
                         <SelectValue placeholder="Select a trigger" />
                     </SelectTrigger>
                     <SelectContent >
@@ -68,7 +68,7 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                             asset: value
                         })
                     }}>
-                        <SelectTrigger className="w-full p-4">
+                        <SelectTrigger className="w-full p-4 rounded-md shadow-sm">
                             <SelectValue placeholder="Select an asset" />
                         </SelectTrigger>
                         <SelectContent >
@@ -84,13 +84,13 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                             </SelectGroup>
                         </SelectContent>
                     </Select>
-                        <Input placeholder='trigger price' onChange={(e) => setMetaData({ ...metaData, price: Number(e.target.value) })}></Input>
+                        <Input className="mt-3" placeholder='trigger price' value={metaData?.price} onChange={(e) => setMetaData({ ...metaData, price: Number(e.target.value) })}></Input>
                     </>
                 }
                 {
-                    selectedTrigger === "time-trigger" && <Input className='rounded-md shadow border' placeholder='enter time interval ( in seconds )' onChange={e => setMetaData((metaData: NodeMetaData) => ({ ...metaData, timeInterval: Number(e.target.value) }))}></Input>
+                    selectedTrigger === "time-trigger" && <Input className='rounded-md shadow-sm border mt-3' placeholder='enter time interval ( in seconds )' value={metaData?.time} onChange={e => setMetaData((metaData: NodeMetaData) => ({ ...metaData, time: Number(e.target.value) }))}></Input>
                 }
-                <SheetFooter>
+                <SheetFooter className="flex gap-2 justify-end">
                     <Button onClick={() => onSelect(selectedTrigger, metaData)} type="submit">Create Trigger</Button>
                     <SheetClose asChild>
                         <Button variant="outline">Close</Button>

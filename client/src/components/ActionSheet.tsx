@@ -31,14 +31,14 @@ interface actionType {
 
 
 
-const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeMetaData) => void }) => {
+const ActionSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeMetaData) => void }) => {
 
     const [selectedAction, setSelectedAction] = useState(SUPPORTED_ACTIONS[0].id);
     const [metaData, setMetaData] = useState<TradingMetaData | {}>({})
 
     return (
         <Sheet defaultOpen={true}>
-            <SheetContent className='p-4'>
+            <SheetContent className='p-6 glass'>
                 <SheetHeader>
                     <SheetTitle>Action</SheetTitle>
                     <SheetDescription>
@@ -47,7 +47,7 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                 </SheetHeader>
 
                 <Select onValueChange={(value) => setSelectedAction(value)}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full p-4 rounded-md shadow-sm">
                         <SelectValue placeholder="select an action" />
                     </SelectTrigger>
                     <SelectContent >
@@ -65,7 +65,7 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                     <div>Type</div>
                 </Select>
                 <Select value={metaData?.type} onValueChange={(value: string) => setMetaData(metaData => ({ ...metaData, type: value }))}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full p-3 rounded-md shadow-sm">
                         <SelectValue placeholder="select type" />
                     </SelectTrigger>
                     <SelectContent >
@@ -82,8 +82,8 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                     </SelectContent>
                     <div>Assets</div>
                 </Select>
-                <Select value={metaData?.symbol} onValueChange={(value: any) => setMetaData(metaData => ({ ...metaData, asset: value }))}>
-                    <SelectTrigger>
+                <Select value={metaData?.symbol} onValueChange={(value: any) => setMetaData(metaData => ({ ...metaData, symbol: value }))}>
+                    <SelectTrigger className="w-full p-3 rounded-md shadow-sm">
                         <SelectValue placeholder="select an asset" />
                     </SelectTrigger>
                     <SelectContent >
@@ -99,10 +99,10 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
                         </SelectGroup>
                     </SelectContent>
                 </Select>
-                <div>Qty</div>
-                <Input placeholder='enter quantity' onChange={(e) => setMetaData(metaData => ({ ...metaData, qty: Number(e.target.value) }))}></Input>
+                <div className="mt-3">Qty</div>
+                <Input className="mt-1" placeholder='enter quantity' onChange={(e) => setMetaData(metaData => ({ ...metaData, qty: Number(e.target.value) }))}></Input>
 
-                <SheetFooter>
+                <SheetFooter className="flex gap-2 justify-end">
                     <Button onClick={() => onSelect(selectedAction, metaData)} type="submit">Create Action</Button>
                     <SheetClose asChild>
                         <Button variant="outline">Close</Button>
@@ -113,4 +113,4 @@ const TriggerSheet = ({ onSelect }: { onSelect: (kind: NodeKind, metaData: NodeM
     )
 }
 
-export default TriggerSheet
+export default ActionSheet
